@@ -3,8 +3,13 @@
   "displayName": "ModelScopic",
   "description": "Companion extension for the ModelScopic MCP server.",
   "version": "0.0.1",
-  "publisher": "modelscopic",
-  "private": true,
+  "publisher": "thecrystalize",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheCrystalize/ModelScopic_MCP.git"
+  },
+  "categories": ["Other"],
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -55,7 +60,8 @@
   },
   "scripts": {
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",

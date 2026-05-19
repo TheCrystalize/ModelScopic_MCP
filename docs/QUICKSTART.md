@@ -40,11 +40,23 @@ You should see 11/12 pass. The `vscode bridge handshake` failure is expected unt
 
 ### Launch the VSCode bridge
 
+**Preferred: install the packaged extension once.**
+
+```cmd
+cd vscode-extension
+npm install && npm run compile && npm run package
+code --install-extension modelscopic-vscode-0.0.1.vsix
+```
+
+After install, reload any VSCode window (Ctrl+Shift+P -> "Developer: Reload Window"). You should see `[plug] ModelScopic` in the bottom-right status bar. Bridge starts automatically with VSCode.
+
+**Alternative: F5 dev mode** (faster iteration, but you have to keep the dev-host window open):
+
 1. Open [vscode-extension/](../vscode-extension/) in VSCode (File -> Open Folder).
 2. Press **F5**. A second VSCode window opens with `[Extension Development Host]` in the title bar.
-3. In that second window, look bottom-right -- you should see `[plug] ModelScopic`. Hover for `Bridge: listening -- 127.0.0.1:<port>`.
+3. Status bar in the second window: `[plug] ModelScopic`.
 
-Re-run the doctor: should be 12/12.
+Either way, re-run the doctor -- should be 12/12.
 
 ### Run the unified entry
 
@@ -76,7 +88,9 @@ A session auto-starts on the first gated call and auto-wipes on exit (use
 `.keep <reason>` to retain it instead). Type `.list` to see all tools or
 `.help <tool>` for one's schema.
 
-**As an MCP client config** (Claude Desktop is `%APPDATA%\Claude\claude_desktop_config.json`):
+**As an MCP client config:**
+
+For **Claude Desktop** (`%APPDATA%\Claude\claude_desktop_config.json`):
 
 ```json
 {
@@ -90,7 +104,18 @@ A session auto-starts on the first gated call and auto-wipes on exit (use
 }
 ```
 
-Restart the client. The model has access to all 38 tools.
+For the **Claude VSCode extension**: type `/mcp` in any conversation and use the "Add server" UI, or edit the extension's MCP config (typically under `%APPDATA%\Code\User\globalStorage\anthropic.claude-code\`) and add:
+
+```json
+"modelscopic": {
+  "command": "c:\\dev\\ModelScopic_MCP\\server\\dist\\modelscopic.exe",
+  "args": []
+}
+```
+
+For **Cline / Continue / other VSCode MCP clients**: same shape, each tool has its own config file path.
+
+Restart/reload the client. The model has access to all 38 tools.
 
 **Flag overrides** (for when you need to force a mode):
 
