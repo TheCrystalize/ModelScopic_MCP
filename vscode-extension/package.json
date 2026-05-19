@@ -1,0 +1,69 @@
+{
+  "name": "modelscopic-vscode",
+  "displayName": "ModelScopic",
+  "description": "Companion extension for the ModelScopic MCP server.",
+  "version": "0.0.1",
+  "publisher": "modelscopic",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./out/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "modelscopic.showStatus",
+        "title": "ModelScopic: Show Status"
+      },
+      {
+        "command": "modelscopic.stopBridge",
+        "title": "ModelScopic: Stop Bridge"
+      },
+      {
+        "command": "modelscopic.startBridge",
+        "title": "ModelScopic: Start Bridge"
+      }
+    ],
+    "configuration": {
+      "title": "ModelScopic",
+      "properties": {
+        "modelscopic.bridge.host": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Host the WebSocket bridge binds to. Loopback only."
+        },
+        "modelscopic.retention.defaultKeep": {
+          "type": "boolean",
+          "default": false,
+          "description": "When the model does not specify, keep the session folder on session_end."
+        },
+        "modelscopic.retention.alwaysKeepOnBreakerTrip": {
+          "type": "boolean",
+          "default": false,
+          "description": "Keep session folder if the circuit breaker tripped."
+        },
+        "modelscopic.retention.alwaysKeepOnKillSwitch": {
+          "type": "boolean",
+          "default": false,
+          "description": "Keep session folder if the user used the kill switch."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@types/ws": "^8.5.10",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  }
+}
