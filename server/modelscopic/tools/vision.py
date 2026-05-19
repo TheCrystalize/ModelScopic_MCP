@@ -60,7 +60,7 @@ def register(reg: "ToolRegistry", *, manager: SessionManager) -> None:
         cap = await asyncio.to_thread(
             vision.capture_window, hwnd, audit=manager.audit, region=region, include_base64=False,
         )
-        boxes = await asyncio.to_thread(vision.ocr_image_path, cap.path)
+        boxes = await asyncio.to_thread(vision.ocr_capture, cap)
         min_conf = float(args.get("min_confidence", 50.0))
         return {
             "image_id": cap.image_id,
@@ -89,7 +89,7 @@ def register(reg: "ToolRegistry", *, manager: SessionManager) -> None:
             cap = await asyncio.to_thread(
                 vision.capture_window, hwnd, audit=manager.audit, region=region, include_base64=False,
             )
-            boxes = await asyncio.to_thread(vision.ocr_image_path, cap.path)
+            boxes = await asyncio.to_thread(vision.ocr_capture, cap)
             for b in boxes:
                 if b.confidence >= min_conf and pattern.search(b.text):
                     return {
