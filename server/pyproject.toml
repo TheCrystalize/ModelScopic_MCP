@@ -22,12 +22,18 @@ dev = [
   "pytest-asyncio>=0.23",
   "ruff>=0.4",
 ]
+build = [
+  "pyinstaller>=6.0",
+]
 # Input injection deps land in M3:
 # input = ["pydirectinput>=1.0.4"]
 
 [project.scripts]
 modelscopic = "modelscopic.__main__:main"
-modelscopic-cli = "modelscopic.cli:main"
+# Convenience aliases. The unified `modelscopic` command will choose the right
+# mode based on stdin (TTY -> REPL, pipe -> MCP). These force a specific mode:
+modelscopic-repl = "modelscopic.cli:main"
+modelscopic-mcp  = "modelscopic.server:_sync_entry"
 
 [tool.setuptools.packages.find]
 where = ["."]

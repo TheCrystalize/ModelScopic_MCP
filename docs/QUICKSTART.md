@@ -46,9 +46,37 @@ You should see 11/12 pass. The `vscode bridge handshake` failure is expected unt
 
 Re-run the doctor: should be 12/12.
 
-### Connect an MCP client
+### Run the unified entry
 
-Add to your MCP client's config (Claude Desktop is `%APPDATA%\Claude\claude_desktop_config.json`):
+`python -m modelscopic` auto-detects how it was launched:
+
+- **Pipe / MCP client** -> runs the MCP stdio server (JSON-RPC over stdin/stdout)
+- **Terminal (TTY)** -> drops you into the interactive REPL
+
+So the same command works for both an MCP client config and a human at a prompt.
+
+**As a human:**
+
+```cmd
+python -m modelscopic
+```
+
+You get the REPL:
+
+```
+modelscopic> .list
+modelscopic> list_windows
+modelscopic> screenshot
+modelscopic> click x=400 y=300
+modelscopic> .help screenshot
+modelscopic> .quit
+```
+
+A session auto-starts on the first gated call and auto-wipes on exit (use
+`.keep <reason>` to retain it instead). Type `.list` to see all tools or
+`.help <tool>` for one's schema.
+
+**As an MCP client config** (Claude Desktop is `%APPDATA%\Claude\claude_desktop_config.json`):
 
 ```json
 {
@@ -62,29 +90,15 @@ Add to your MCP client's config (Claude Desktop is `%APPDATA%\Claude\claude_desk
 }
 ```
 
-Restart the client. The model should now have access to all 38 tools.
+Restart the client. The model has access to all 38 tools.
 
-### Or: poke tools manually with the REPL
+**Flag overrides** (for when you need to force a mode):
 
-If you want to test a tool without spinning up an MCP client:
-
-```cmd
-python -m modelscopic.cli
-```
-
-You'll get a prompt where you can type tool names and JSON args:
-
-```
-modelscopic> list_windows
-modelscopic> screenshot
-modelscopic> click x=400 y=300
-modelscopic> .help screenshot
-modelscopic> .quit
-```
-
-A session auto-starts on the first gated call and auto-wipes on exit (use
-`.keep <reason>` to retain it instead). Type `.list` to see all tools or
-`.help <tool>` for one's schema.
+- `--mcp` -- force MCP stdio mode even when stdin is a TTY
+- `--repl` -- force REPL even when stdin is piped
+- `--doctor` -- run the environment self-check and exit
+- `--replay` -- start the session replay viewer (web UI)
+- `--help` -- show the banner
 
 ## The iteration loop
 
@@ -145,6 +159,33 @@ Opens a browser tab listing kept sessions; click one to step through tool calls 
 | `terminal.execute`: shellIntegration error | Shell doesn't have VSCode shell integration active | Wait a moment after `terminal.create`; use bash/pwsh/cmd-on-Win11 |
 | Window picker grabs a ghost HWND | Old picker bug | Fixed in current version (filters minimized/cloaked/offscreen); update if behavior recurs |
 | Scroll seems not to work | Modern app dispatches wheel to deep child | Fixed in current version (`WindowFromPoint`); inspect screenshots before/after to confirm |
+
+## Building a standalone .exe (optional)
+
+If you'd rather not require Python on the target machine, you can bundle everything into a single ~42 MB `.exe`:
+
+```cmd
+cd c:\dev\ModelScopic_MCP\server
+pip install -e .[build]
+pyinstaller modelscopic.spec --clean --noconfirm
+```
+
+Output: `dist\modelscopic.exe`. It exposes the same dual-mode behavior as `python -m modelscopic` -- pipe stdin and it runs as the MCP server, run it from a terminal and you get the REPL.
+
+The Tesseract OCR binary is still a separate system install -- bundling it would push the package past 100 MB and the user can install it once and forget it.
+
+MCP client config for the exe:
+
+```json
+{
+  "mcpServers": {
+    "modelscopic": {
+      "command": "C:\\path\\to\\dist\\modelscopic.exe",
+      "args": []
+    }
+  }
+}
+```
 
 ## File layout
 

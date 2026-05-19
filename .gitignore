@@ -28,3 +28,8 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/
+
+# PyInstaller artifacts
+build/
+dist/
+_modelscopic_launcher.py

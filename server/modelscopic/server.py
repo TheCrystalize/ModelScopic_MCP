@@ -115,6 +115,11 @@ async def run_stdio() -> None:
             await vscode.close()
 
 
+def _sync_entry() -> None:
+    """Sync wrapper for the `modelscopic-mcp` script alias."""
+    asyncio.run(run_stdio())
+
+
 async def _connect_vscode() -> VSCodeClient | None:
     try:
         handshake = read_handshake()
