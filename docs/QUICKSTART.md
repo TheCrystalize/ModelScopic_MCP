@@ -104,14 +104,30 @@ For **Claude Desktop** (`%APPDATA%\Claude\claude_desktop_config.json`):
 }
 ```
 
-For the **Claude VSCode extension**: type `/mcp` in any conversation and use the "Add server" UI, or edit the extension's MCP config (typically under `%APPDATA%\Code\User\globalStorage\anthropic.claude-code\`) and add:
+For **Claude Code** (CLI and VSCode extension), MCP servers are defined in a per-project `.mcp.json` and approved once in user settings:
+
+**1.** Create `.mcp.json` at the root of any project where you want modelscopic available (this repo already has one):
 
 ```json
-"modelscopic": {
-  "command": "c:\\dev\\ModelScopic_MCP\\server\\dist\\modelscopic.exe",
-  "args": []
+{
+  "mcpServers": {
+    "modelscopic": {
+      "command": "c:\\dev\\ModelScopic_MCP\\server\\dist\\modelscopic.exe",
+      "args": []
+    }
+  }
 }
 ```
+
+**2.** The first time you open a Claude Code session in that project, you'll be prompted to approve the server. Approving writes it into `enabledMcpjsonServers` in `~/.claude/settings.json`. You can also pre-approve manually:
+
+```json
+{
+  "enabledMcpjsonServers": ["modelscopic"]
+}
+```
+
+After that, every Claude Code session in that project has the 38 modelscopic tools available.
 
 For **Cline / Continue / other VSCode MCP clients**: same shape, each tool has its own config file path.
 
