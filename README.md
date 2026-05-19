@@ -33,4 +33,4 @@ Then open [vscode-extension/](vscode-extension/) in VSCode and press F5.
 
 ## Status
 
-36 MCP tools across session lifecycle, VSCode control, vision, input injection, window management, and escape-hatch variants. Verified end-to-end against Notepad on Windows 11. See [docs/PLAN.md](docs/PLAN.md) for the full design + milestone history.
+38 MCP tools across session lifecycle, VSCode control, vision, input injection, window management, and escape-hatch variants. Also includes an interactive REPL (`python -m modelscopic.cli`) for manually poking tools without an MCP client. Verified end-to-end against Notepad on Windows 11. See [docs/PLAN.md](docs/PLAN.md) for the full design + milestone history.

@@ -27,6 +27,7 @@ dev = [
 
 [project.scripts]
 modelscopic = "modelscopic.__main__:main"
+modelscopic-cli = "modelscopic.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["."]

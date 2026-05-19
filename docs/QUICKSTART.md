@@ -62,7 +62,29 @@ Add to your MCP client's config (Claude Desktop is `%APPDATA%\Claude\claude_desk
 }
 ```
 
-Restart the client. The model should now have access to all 36 tools.
+Restart the client. The model should now have access to all 38 tools.
+
+### Or: poke tools manually with the REPL
+
+If you want to test a tool without spinning up an MCP client:
+
+```cmd
+python -m modelscopic.cli
+```
+
+You'll get a prompt where you can type tool names and JSON args:
+
+```
+modelscopic> list_windows
+modelscopic> screenshot
+modelscopic> click x=400 y=300
+modelscopic> .help screenshot
+modelscopic> .quit
+```
+
+A session auto-starts on the first gated call and auto-wipes on exit (use
+`.keep <reason>` to retain it instead). Type `.list` to see all tools or
+`.help <tool>` for one's schema.
 
 ## The iteration loop
 
